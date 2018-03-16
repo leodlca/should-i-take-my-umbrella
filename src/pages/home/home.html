@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar [color]="navbarColor">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Devo levar meu guarda-chuva?</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content [class]="currentBody" padding>
+    
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <ion-grid>
+    <ion-row class="flex-1">
+      <ion-col col-8 class="flex-1">
+        <h2 text-center class="temperature">
+          {{temperature && temperature !== -999 ? temperature.toFixed(0).toString() + "°C" : ""}}
+        </h2>
+      </ion-col>
+      <ion-col col-4 class="flex-1">
+        <img class="center-img" [src]="star"/>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="flex-2">
+      <ion-col>
+        <h2 text-center class="message">
+          {{message}}
+        </h2>
+      </ion-col>
+    </ion-row>
+
+    <ion-footer no-border>
+      <ion-row>
+        <ion-col col-12>
+          <p no-margin text-center>
+            {{summary && summary !== "" ? '"' + summary + '"' : ""}}
+          </p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-12>
+          <p no-margin text-center>
+            {{averagePrecipProbability === -1 ? "" : "Probabilidade de chuva: " + (averagePrecipProbability * 100).toFixed(1).toString() + "%" }}
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-footer>
+  </ion-grid>
+
+</ion-content>

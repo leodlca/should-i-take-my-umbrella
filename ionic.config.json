@@ -1,0 +1,8 @@
+{
+  "name": "should-i-take-my-umbrella",
+  "app_id": "a49353d4",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
