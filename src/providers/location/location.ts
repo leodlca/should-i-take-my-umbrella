@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
-import { Geolocation } from '@ionic-native/geolocation';
+import { NativeStorage } from '@ionic-native/native-storage';
 
 @Injectable()
 export class LocationProvider {
 
-  constructor(private alertCtrl: AlertController) {
+  constructor(private alertCtrl: AlertController, private storage: NativeStorage) {
   }
 
   askForAddress() {
@@ -26,14 +26,18 @@ export class LocationProvider {
             text: 'Cancelar',
             role: 'cancel',
             handler: data => {
-              reject(data);
+              reject('Não foi possível obter sua localização :(');
             }
           },
           {
             text: 'Salvar',
             handler: data => {
   
-              resolve(data.address);
+              this.storage.setItem('address', data.address).then(res => {
+                resolve(data.address);
+              }, err => {
+                reject('Não foi possível salvar sua localização :(');
+              });
   
             }
           }

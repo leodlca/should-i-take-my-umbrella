@@ -44,46 +44,49 @@ export class HomePage {
     }
   }
 
-  getData(address) {
+  getData(address, refresher?) {
 
     this.coreProvider.shouldI(address).then(res => {
+
       this.message = res['friendlyMessage'];
       this.summary = res['hourly'].summary;
       this.averagePrecipProbability = res['averagePrecipProbability'];
       this.temperature = res['temperature'];
+
+      if(refresher) refresher.complete();
+
     }, err => {
+
+      this.message = 'Não foi possível obter sua localização :(';
+      if(refresher) refresher.complete();
 
     });
   }
 
   doRefresh(refresher) {
 
-    this.coreProvider.shouldI('11453140').then(res => {
-      this.message = res['friendlyMessage'];
-      this.summary = res['hourly'].summary;
-      this.averagePrecipProbability = res['averagePrecipProbability'];
-      this.temperature = res['temperature'];
-      refresher.complete();
-    }, err => {
-
-    });
+    this.loadAddress(refresher);
 
   }
 
-  loadAddress() {
+  loadAddress(refresher?) {
 
-    this.storage.getItem('stored-address')
+    this.storage.getItem('address')
     .then(res => {
 
-      this.getData(res);
+      console.log('address exists');
+      this.getData(res, refresher);
 
     }, err => {
 
       this.location.askForAddress().then(res => {
 
+        this.getData(res, refresher);
+
       }, err => {
 
-        this.message = 'Não foi possível obter sua localização :('
+        this.message = err;
+        if (refresher) refresher.complete();
 
       });
 
