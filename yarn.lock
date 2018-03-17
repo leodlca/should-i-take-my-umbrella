@@ -66,6 +66,14 @@
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-4.4.0.tgz#fb0f071543bd2725d858f5a0f5c20adbece20df4"
 
+"@ionic-native/geolocation@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@ionic-native/geolocation/-/geolocation-4.5.3.tgz#18624b1f0fea844a61e668472b0ec51bb0511883"
+
+"@ionic-native/native-storage@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@ionic-native/native-storage/-/native-storage-4.5.3.tgz#4441c19c3b7ea8cd9eaa1e89d4ca3842e874e924"
+
 "@ionic-native/splash-screen@4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/splash-screen/-/splash-screen-4.4.0.tgz#81ed723d7fd3f0d643072b5461fa0c32dcc330b1"
@@ -804,6 +812,10 @@ cookie@0.3.1:
 copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
+
+cordova-plugin-nativestorage@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-nativestorage/-/cordova-plugin-nativestorage-2.3.1.tgz#41ff676e77af60d7eda3d4268af05da424b2ec89"
 
 cordova-plugin-statusbar@^2.4.1:
   version "2.4.1"

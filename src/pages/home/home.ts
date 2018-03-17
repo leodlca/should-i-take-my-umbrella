@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { CoreProvider } from '../../providers/core/core';
 import { StatusBar } from '@ionic-native/status-bar';
+import { NativeStorage } from '@ionic-native/native-storage';
+import { LocationProvider } from '../../providers/location/location';
 
 @Component({
   selector: 'page-home',
@@ -19,16 +21,17 @@ export class HomePage {
   averagePrecipProbability: number = -1;
 
   constructor(public navCtrl: NavController, public coreProvider: CoreProvider,
-  private statusBar: StatusBar) {
+  private statusBar: StatusBar, private storage: NativeStorage, private location: LocationProvider) {
   }
 
   ionViewDidLoad() {
     this.initiateBody();
-    this.getData();
+    this.loadAddress();
+    this.statusBar.styleLightContent();
   }
 
   initiateBody() {
-    const hours = 10//new Date().getHours();
+    const hours = new Date().getHours();
 
     if(hours >= 19 || hours <= 6){
       this.currentBody = 'body-night';
@@ -41,8 +44,9 @@ export class HomePage {
     }
   }
 
-  getData() {
-    this.coreProvider.shouldI('11453140').then(res => {
+  getData(address) {
+
+    this.coreProvider.shouldI(address).then(res => {
       this.message = res['friendlyMessage'];
       this.summary = res['hourly'].summary;
       this.averagePrecipProbability = res['averagePrecipProbability'];
@@ -53,6 +57,7 @@ export class HomePage {
   }
 
   doRefresh(refresher) {
+
     this.coreProvider.shouldI('11453140').then(res => {
       this.message = res['friendlyMessage'];
       this.summary = res['hourly'].summary;
@@ -62,6 +67,28 @@ export class HomePage {
     }, err => {
 
     });
+
+  }
+
+  loadAddress() {
+
+    this.storage.getItem('stored-address')
+    .then(res => {
+
+      this.getData(res);
+
+    }, err => {
+
+      this.location.askForAddress().then(res => {
+
+      }, err => {
+
+        this.message = 'Não foi possível obter sua localização :('
+
+      });
+
+    });
+
   }
 
 }

@@ -13,7 +13,7 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-
+  color: string = 'morning';
   pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
@@ -31,7 +31,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleLightContent();
+      //this.statusBar.styleLightContent();
       this.splashScreen.hide();
     });
   }
@@ -39,6 +39,15 @@ export class MyApp {
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
+
+    const hours = new Date().getHours();
+
+    if(hours >= 19 || hours <= 6) {
+      this.color = 'night';
+    } else {
+      this.color = 'morning';
+    }
+
     this.nav.setRoot(page.component);
   }
 }
