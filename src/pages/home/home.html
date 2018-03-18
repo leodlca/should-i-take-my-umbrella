@@ -48,7 +48,7 @@
       <ion-row>
         <ion-col col-12>
           <p no-margin text-center>
-            {{averagePrecipProbability === -1 ? "" : "Probabilidade de chuva: " + (averagePrecipProbability * 100).toFixed(1).toString() + "%" }}
+            {{averagePrecipProbability === -1 ? "" : "Probabilidade de chuva (próx " + xHoursDisplay + "hr(s)): " + (averagePrecipProbability * 100).toFixed(1).toString() + "%" }}
           </p>
         </ion-col>
       </ion-row>

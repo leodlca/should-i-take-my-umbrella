@@ -1,25 +1,30 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule, Config } from 'ionic-angular';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { ConfigPage } from '../pages/config/config';
+import { AboutPage } from '../pages/about/about'; 
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { CoreProvider } from '../providers/core/core';
 import { ServerConfigProvider } from '../providers/server-config/server-config';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { LocationProvider } from '../providers/location/location';
+import { XHoursProvider } from '../providers/x-hours/x-hours';
+import { PopUpProvider } from '../providers/pop-up/pop-up';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    ListPage
+    ConfigPage,
+    AboutPage
   ],
   imports: [
     BrowserModule,
@@ -30,17 +35,21 @@ import { LocationProvider } from '../providers/location/location';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage
+    ConfigPage,
+    AboutPage
   ],
   providers: [
     HttpClientModule,
     StatusBar,
     SplashScreen,
+    Geolocation,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     CoreProvider,
     ServerConfigProvider,
     NativeStorage,
-    LocationProvider
+    LocationProvider,
+    XHoursProvider,
+    PopUpProvider
   ]
 })
 export class AppModule {}

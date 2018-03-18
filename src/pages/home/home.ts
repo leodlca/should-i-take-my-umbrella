@@ -4,6 +4,8 @@ import { CoreProvider } from '../../providers/core/core';
 import { StatusBar } from '@ionic-native/status-bar';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { LocationProvider } from '../../providers/location/location';
+import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
+import { XHoursProvider } from '../../providers/x-hours/x-hours';
 
 @Component({
   selector: 'page-home',
@@ -19,9 +21,17 @@ export class HomePage {
   temperature: number = -999;
   summary: string = '';
   averagePrecipProbability: number = -1;
+  xHoursDisplay: any = -999;
+
+  geolocationOptions: GeolocationOptions = {
+    timeout: 5000,
+    enableHighAccuracy: true,
+    maximumAge: 3200
+  };
 
   constructor(public navCtrl: NavController, public coreProvider: CoreProvider,
-  private statusBar: StatusBar, private storage: NativeStorage, private location: LocationProvider) {
+  private statusBar: StatusBar, private storage: NativeStorage, private location: LocationProvider,
+  private geolocation: Geolocation, private xHours: XHoursProvider) {
   }
 
   ionViewDidLoad() {
@@ -44,24 +54,67 @@ export class HomePage {
     }
   }
 
-  getData(address, refresher?) {
+  getDataByAddress(address, refresher?) {
 
-    this.coreProvider.shouldI(address).then(res => {
+    this.xHours.get().then(xHours => {
 
-      this.message = res['friendlyMessage'];
-      this.summary = res['hourly'].summary;
-      this.averagePrecipProbability = res['averagePrecipProbability'];
-      this.temperature = res['temperature'];
+      this.coreProvider.addressShouldI(address, xHours).then(res => {
 
-      if(refresher) refresher.complete();
-
-    }, err => {
-
-      this.message = 'Não foi possível obter sua localização :(';
-      if(refresher) refresher.complete();
+        this.message = res['friendlyMessage'];
+        this.summary = res['hourly'].summary;
+        this.averagePrecipProbability = res['averagePrecipProbability'];
+        this.temperature = res['temperature'];
+        this.xHoursDisplay = xHours;
+  
+        this.changeStar(0.52/*res['averagePrecipProbability']*/);
+        if(refresher) refresher.complete();
+  
+      }, err => {
+  
+        this.message = 'Não foi possível encontrar seu endereço :( Ligue seu GPS!';
+        if(refresher) refresher.complete();
+  
+      });
 
     });
+
   }
+
+  getDataByLatLng(lat, lng, refresher?) {
+
+    this.xHours.get().then(xHours => {
+
+      this.coreProvider.latlngShouldI(lat, lng, xHours).then(res => {
+
+        this.message = res['friendlyMessage'];
+        this.summary = res['hourly'].summary;
+        this.averagePrecipProbability = res['averagePrecipProbability'];
+        this.temperature = res['temperature'];
+        this.xHoursDisplay = xHours;
+
+        this.changeStar(res['averagePrecipProbability']);
+        if(refresher) refresher.complete();
+  
+      }, err => {
+  
+        this.message = 'Não foi possível obter informações para sua localização :(';
+        if(refresher) refresher.complete();
+  
+      });
+
+    });
+
+  }
+
+  changeStar(percentage){
+    if(percentage <= 0.19) {
+      this.initiateBody();
+    } else if(percentage <= 0.49) {
+      this.star = 'assets/imgs/cloud.png';
+    } else {
+      this.star = 'assets/imgs/rain.png'
+    }
+  } 
 
   doRefresh(refresher) {
 
@@ -71,22 +124,38 @@ export class HomePage {
 
   loadAddress(refresher?) {
 
-    this.storage.getItem('address')
-    .then(res => {
+    this.geolocation.getCurrentPosition(this.geolocationOptions).then(res => {
 
-      console.log('address exists');
-      this.getData(res, refresher);
+      const lat = res.coords.latitude;
+      const lng = res.coords.longitude;
+      
+      console.log('got lat, lng');
+      this.getDataByLatLng(lat, lng, refresher);
 
     }, err => {
 
-      this.location.askForAddress().then(res => {
+      console.log('geolocation err runing');
+      this.storage.getItem('address')
+      .then(res => {
 
-        this.getData(res, refresher);
+        console.log('address exists');
+        this.getDataByAddress(res, refresher);
 
       }, err => {
 
-        this.message = err;
-        if (refresher) refresher.complete();
+        console.log('asking for address');
+        this.location.askForAddress().then(res => {
+
+          console.log('got address');
+          this.getDataByAddress(res, refresher);
+
+        }, err => {
+
+          console.log('everything failed');
+          this.message = err;
+          if (refresher) refresher.complete();
+
+        });
 
       });
 

@@ -14,7 +14,7 @@ export class LocationProvider {
 
       let alert = this.alertCtrl.create({
         title: 'Insira seu endereço ou CEP',
-        message: 'Inclua rua, número, cidade e estado, ou apenas seu CEP.',
+        message: 'Escreva apenas seu CEP ou o endereço no formato: "rua, número, cidade, sigla estado"',
         inputs: [
           {
             name: 'address',

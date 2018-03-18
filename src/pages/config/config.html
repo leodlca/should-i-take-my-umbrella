@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Configurações</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-item>
+        <ion-label>Número de horas seguintes para calcular a probabilidade de chuva. Padrão: 12 horas</ion-label>
+        <ion-select [(ngModel)]="xHour" (ionChange)="changeXHour()">
+          <ion-option *ngFor="let hour of hours" [value]="hour" >{{hour}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-row>
+    <ion-row>
+      <ion-item>
+        <button ion-button full (click)="changeAddress()">Alterar endereço manualmente</button>
+      </ion-item>
+    </ion-row>
+  </ion-grid>
+</ion-content>
