@@ -1,7 +1,7 @@
 # should-i-take-my-umbrella
 An app that tells you if you should take your umbrella when leaving home
 
-### Todo List
+## Todo List
 1. (WILL NOT FIX) Fix navbar menu (sidemenu) background color. 
 2. (DONE) Disable option to rotate screen.
 2. (DONE) Add clouds and/or rain for when it's raining (use percentage or node icon).
@@ -21,3 +21,9 @@ An app that tells you if you should take your umbrella when leaving home
 11. Optimize address storing lat, lng.
 12. Publish the app in PlayStore.
 13. Publish the app in Apple Store.
+
+## Changelog
+
+### v0.0.1 -> v0.0.2
+1. Alterada descrição para uso de cidade apenas no endereço.
+2. [HOTFIX] +50% displays NaN.

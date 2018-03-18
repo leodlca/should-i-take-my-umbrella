@@ -6,6 +6,7 @@ import { NativeStorage } from '@ionic-native/native-storage';
 import { LocationProvider } from '../../providers/location/location';
 import { Geolocation, GeolocationOptions } from '@ionic-native/geolocation';
 import { XHoursProvider } from '../../providers/x-hours/x-hours';
+import { FirstRunProvider } from '../../providers/first-run/first-run';
 
 @Component({
   selector: 'page-home',
@@ -24,19 +25,20 @@ export class HomePage {
   xHoursDisplay: any = -999;
 
   geolocationOptions: GeolocationOptions = {
-    timeout: 5000,
+    timeout: 3000,
     enableHighAccuracy: true,
-    maximumAge: 3200
+    maximumAge: 100000
   };
 
   constructor(public navCtrl: NavController, public coreProvider: CoreProvider,
   private statusBar: StatusBar, private storage: NativeStorage, private location: LocationProvider,
-  private geolocation: Geolocation, private xHours: XHoursProvider) {
+  private geolocation: Geolocation, private xHours: XHoursProvider, private firstRun: FirstRunProvider) {
   }
 
   ionViewDidLoad() {
     this.initiateBody();
-    this.loadAddress();
+    //this.loadAddress();
+    this.getDataByAddress('London');
     this.statusBar.styleLightContent();
   }
 
@@ -66,7 +68,10 @@ export class HomePage {
         this.temperature = res['temperature'];
         this.xHoursDisplay = xHours;
   
-        this.changeStar(0.52/*res['averagePrecipProbability']*/);
+        console.log(JSON.stringify(res, undefined, 2));
+        console.log(this.averagePrecipProbability);
+        console.log((this.averagePrecipProbability * 100).toFixed(1).toString())
+        this.changeStar(res['averagePrecipProbability']);
         if(refresher) refresher.complete();
   
       }, err => {
@@ -134,26 +139,36 @@ export class HomePage {
 
     }, err => {
 
-      console.log('geolocation err runing');
-      this.storage.getItem('address')
-      .then(res => {
+      this.firstRun.isFirstRun().then(firstRun => {
 
-        console.log('address exists');
-        this.getDataByAddress(res, refresher);
+        this.message = 'Ligue seu GPS para uma melhor experiência. Arraste a página para baixo para continuar! :D';
+        console.log('first run');
+        if(refresher) refresher.complete();
 
       }, err => {
 
-        console.log('asking for address');
-        this.location.askForAddress().then(res => {
+        console.log('geolocation err runing');
+        this.storage.getItem('address')
+        .then(res => {
 
-          console.log('got address');
+          console.log('address exists');
           this.getDataByAddress(res, refresher);
 
         }, err => {
 
-          console.log('everything failed');
-          this.message = err;
-          if (refresher) refresher.complete();
+          console.log('asking for address');
+          this.location.askForAddress().then(res => {
+
+            console.log('got address');
+            this.getDataByAddress(res, refresher);
+
+          }, err => {
+
+            console.log('everything failed');
+            this.message = err;
+            if (refresher) refresher.complete();
+
+          });
 
         });
 

@@ -18,6 +18,7 @@ import { NativeStorage } from '@ionic-native/native-storage';
 import { LocationProvider } from '../providers/location/location';
 import { XHoursProvider } from '../providers/x-hours/x-hours';
 import { PopUpProvider } from '../providers/pop-up/pop-up';
+import { FirstRunProvider } from '../providers/first-run/first-run';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { PopUpProvider } from '../providers/pop-up/pop-up';
     NativeStorage,
     LocationProvider,
     XHoursProvider,
-    PopUpProvider
+    PopUpProvider,
+    FirstRunProvider
   ]
 })
 export class AppModule {}

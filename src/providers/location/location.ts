@@ -13,12 +13,12 @@ export class LocationProvider {
     return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
-        title: 'Insira seu endereço ou CEP',
-        message: 'Escreva apenas seu CEP ou o endereço no formato: "rua, número, cidade, sigla estado"',
+        title: 'Insira CEP ou o nome de sua cidade',
+        message: 'Escreva apenas o nome de sua cidade ou seu CEP.',
         inputs: [
           {
             name: 'address',
-            placeholder: 'Endereço ou CEP'
+            placeholder: 'Cidade ou CEP'
           }
         ],
         buttons: [

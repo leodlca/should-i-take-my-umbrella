@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ServerConfigProvider {
 
-  private serverURI:string = 'http://192.168.0.111:3000';
+  private serverURI:string = 'https://should-i-take-my-umbrella-api.herokuapp.com';
+  //private serverURI:string = 'https://localhost:3000';
 
   constructor(public http: HttpClient) {
   }
@@ -14,3 +15,4 @@ export class ServerConfigProvider {
   }
 
 }
+  
