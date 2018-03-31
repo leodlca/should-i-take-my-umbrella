@@ -24,12 +24,6 @@ export class HomePage {
   averagePrecipProbability: number = -1;
   xHoursDisplay: any = -999;
 
-  geolocationOptions: GeolocationOptions = {
-    timeout: 3000,
-    enableHighAccuracy: true,
-    maximumAge: 100000
-  };
-
   constructor(public navCtrl: NavController, public coreProvider: CoreProvider,
   private statusBar: StatusBar, private storage: NativeStorage, private location: LocationProvider,
   private geolocation: Geolocation, private xHours: XHoursProvider, private firstRun: FirstRunProvider) {
@@ -37,8 +31,7 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.initiateBody();
-    //this.loadAddress();
-    this.getDataByAddress('London');
+    this.loadAddress();
     this.statusBar.styleLightContent();
   }
 
@@ -129,42 +122,35 @@ export class HomePage {
 
   loadAddress(refresher?) {
 
-    this.geolocation.getCurrentPosition(this.geolocationOptions).then(res => {
+    this.geolocation.getCurrentPosition(this.location.geolocationOptions).then(res => {
 
       const lat = res.coords.latitude;
       const lng = res.coords.longitude;
       
-      console.log('got lat, lng');
       this.getDataByLatLng(lat, lng, refresher);
 
     }, err => {
 
       this.firstRun.isFirstRun().then(firstRun => {
 
-        this.message = 'Ligue seu GPS para uma melhor experiência. Arraste a página para baixo para continuar! :D';
-        console.log('first run');
+        this.message = 'Ligue seu GPS com alta precisão para uma melhor experiência. Arraste a página para baixo para continuar! :D';
         if(refresher) refresher.complete();
 
       }, err => {
 
-        console.log('geolocation err runing');
         this.storage.getItem('address')
         .then(res => {
 
-          console.log('address exists');
           this.getDataByAddress(res, refresher);
 
         }, err => {
 
-          console.log('asking for address');
           this.location.askForAddress().then(res => {
 
-            console.log('got address');
             this.getDataByAddress(res, refresher);
 
           }, err => {
 
-            console.log('everything failed');
             this.message = err;
             if (refresher) refresher.complete();
 

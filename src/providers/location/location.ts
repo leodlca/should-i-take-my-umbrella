@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { GeolocationOptions } from '@ionic-native/geolocation';
 
 @Injectable()
 export class LocationProvider {
+
+  geolocationOptions: GeolocationOptions = {
+    timeout: 3000,
+    enableHighAccuracy: true,
+    maximumAge: 0
+  };
 
   constructor(private alertCtrl: AlertController, private storage: NativeStorage) {
   }
@@ -45,16 +52,6 @@ export class LocationProvider {
       });
   
       alert.present();
-
-    });
-
-  }
-
-  getGeolocation() {
-
-    return new Promise((resolve, reject) => {
-
-
 
     });
 
